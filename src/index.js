@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-// const mysql = require('mysql2/promise');
-// const dbConfigs = require('./dbConfigs');
+const { insertTodoDb } = require('./models/todoModel');
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +11,17 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 
-app.get('/', (req, res) => res.send('hello'));
+const router = express.Router();
+
+router.post('/', async (req, res) => {
+  try {
+    const insertResult = await insertTodoDb(req.body);
+    return res.send(insertResult);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+app.use('/', router);
 
 app.listen(port, () => console.log(`Server is runnign on port ${port}`));
