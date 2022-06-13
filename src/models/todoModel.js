@@ -9,10 +9,8 @@ async function insertTodoDb(data) {
        VALUES (${mysql.escape(data.title)})`
     );
     connection.end();
-    console.log('insertData ===', insertData);
     return insertData;
   } catch (error) {
-    console.log('error in model ===', error);
     return error;
   }
 }

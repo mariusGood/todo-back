@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const { insertTodoDb } = require('./models/todoModel');
+const { validateTodo } = require('./models/validation');
 require('dotenv').config();
 
 const app = express();
@@ -13,7 +14,7 @@ app.use(cors());
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/', validateTodo, async (req, res) => {
   try {
     const insertResult = await insertTodoDb(req.body);
     return res.send(insertResult);
