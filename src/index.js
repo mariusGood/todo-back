@@ -1,8 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const { insertTodoDb, getDataFromDb } = require('./models/todoModel');
-const { validateTodo } = require('./models/validation');
+const {
+  insertTodoDb,
+  getDataFromDb,
+  updateTask,
+  deleteTask,
+} = require('./models/todoModel');
+const { validateTodo } = require('./middleware/validation');
 require('dotenv').config();
 
 const app = express();
@@ -30,6 +35,25 @@ router.get('/', async (req, res) => {
   try {
     const foundData = await getDataFromDb();
     return res.json(foundData);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const result = await updateTask(req.body, req.params.id);
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await deleteTask(id);
+    return res.json(result);
   } catch (error) {
     return res.status(500).send(error);
   }

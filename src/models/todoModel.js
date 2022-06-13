@@ -11,7 +11,6 @@ async function insertTodoDb(data) {
     await connection.close();
     return insertData;
   } catch (error) {
-    console.log('error ===', error);
     return error;
   }
 }
@@ -29,7 +28,38 @@ async function getDataFromDb() {
   }
 }
 
+async function updateTask(data, id) {
+  try {
+    const connection = await mysql.createConnection(dbConfigs);
+    const [result] = await connection.execute(`
+    UPDATE list
+    SET title = ${mysql.escape(data.title)}
+    WHERE id = ${mysql.escape(id)}`);
+    await connection.close();
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+
+async function deleteTask(id) {
+  try {
+    const connection = await mysql.createConnection(dbConfigs);
+    const sql = `
+    DELETE FROM list 
+    WHERE id = ${mysql.escape(id)}
+    LIMIT 1`;
+    const [result] = await connection.execute(sql);
+    await connection.close();
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+
 module.exports = {
   insertTodoDb,
   getDataFromDb,
+  updateTask,
+  deleteTask,
 };
