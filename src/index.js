@@ -11,7 +11,7 @@ const { validateTodo } = require('./middleware/validation');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -43,6 +43,9 @@ router.get('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const result = await updateTask(req.body, req.params.id);
+    if (result.affectedRows) {
+      return res.send({ msg: 'Update successful' });
+    }
     return res.json(result);
   } catch (error) {
     return res.status(500).send(error);
@@ -53,6 +56,9 @@ router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const result = await deleteTask(id);
+    if (result.affectedRows) {
+      return res.send({ msg: 'Delete successful' });
+    }
     return res.json(result);
   } catch (error) {
     return res.status(500).send(error);
