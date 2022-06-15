@@ -1,8 +1,9 @@
 require('dotenv').config();
 
 module.exports = {
-  port: process.env.MYQL_PORT,
-  host: process.env.MYQL_HOST,
-  database: process.env.MYQL_DATABASE,
-  user: process.env.MYQL_USER,
+  port: process.env.MYSQL_PORT,
+  host: process.env.MYSQL_HOST,
+  database: process.env.MYSQL_DATABASE,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD
 };
